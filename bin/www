@@ -1,0 +1,146 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('SkDocMgr:server');
+var http = require('http');
+
+var mongodb = require('mongodb');
+var config = require('../modules/config');
+var uri = config.mongodbUri;
+var MongoClient = require('mongodb').MongoClient;
+
+var https = require('https'),
+  fs = require("fs");
+
+var cluster = require('cluster');
+var numCPUs = require('os').cpus().length;
+
+var options = {
+  key: fs.readFileSync('./privatekey.pem'),
+  cert: fs.readFileSync('./certificate.pem')
+};
+
+
+global.db; //mongodb全局db对象
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3010');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+
+/**
+ * Create HTTPS server.
+ */
+// var server = https.createServer(options, app).listen(3010, function () {
+//     console.log('Https server listening on port ' + 3010);
+// });
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+// Initialize connection once
+// work on cluster
+MongoClient.connect(uri, function(err, database) {
+  if (err) throw err;
+
+  global.db = database;
+
+  console.log('db connected');
+
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+
+  // if (cluster.isMaster) {
+  //   require('os').cpus().forEach(function() {
+  //     cluster.fork();
+  //   });
+  //   cluster.on('exit', function(worker, code, signal) {
+  //     console.log('worker ' + worker.process.pid + ' died');
+  //   });
+  //   cluster.on('listening', function(worker, address) {
+  //     console.log("A worker with #" + worker.id + " is now connected to " +
+  //       address.address +
+  //       ":" + address.port);
+  //   });
+  // } else {
+  //   server.listen(port);
+  //   server.on('error', onError);
+  //   server.on('listening', onListening);
+  // }
+});
+
+
+
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
