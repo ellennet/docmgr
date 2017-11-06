@@ -31,7 +31,7 @@ router.post('/', (req, res, next) => {
   let username = req.body.username;
   let password = req.body.password;
 
-  if (username === 'admin' && password === 'Sk63214501') {
+  if (username === 'admin' && password === 'admin') {
 
     log.info(username, 'login');
 

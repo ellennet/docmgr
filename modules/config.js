@@ -27,4 +27,4 @@ exports.appIds = ['kcptdoc'];
 exports.oss = false;
 
 //文档物理保存路径 [参照第一及第二项中的参数修改]
-exports.DocDiskPath = 'D:\\Work\\NodeApp\\SkDocMgr\\doc\\SkDocMgr\\';
+exports.DocDiskPath = 'D:\\Work\\NodeApp\\DocMgr\\doc\\SkDocMgr\\';
