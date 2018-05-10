@@ -33,7 +33,7 @@ app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length,Authorization,Accept,X-Requested-With,_token');
   res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS');
-  res.header('X-Powered-By','Skygeoinfo Doc Server');
+  res.header('X-Powered-By','zhb Doc Server');
   next();
 });
 
@@ -47,11 +47,13 @@ app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/doc', express.static('doc/skdocmgr'));
 
 //登陆用session处理
 app.use(session({ 

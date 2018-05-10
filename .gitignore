@@ -1,3 +1,5 @@
 logs/info.log
 logs/error.log
 node_modules
+public/pdf
+doc

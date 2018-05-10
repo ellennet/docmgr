@@ -6,7 +6,7 @@ exports.uploadDirInPath = 'doc\\SkDocMgr\\';
 
 //mongodb 服务地址
 //exports.mongodbUri = 'mongodb://test:test@localhost/skdocmgr';
-exports.mongodbUri = 'mongodb://localhost/skdocmgr';
+exports.mongodbUri = 'mongodb://localhost/skdocmgr-gmnn';
 
 //是否带知识库系统
 exports.hasKb = false;
@@ -21,10 +21,10 @@ exports.TranPDFHost = '';
 exports.authAdminUser = ['admin'];
 
 //可用appId [暂时不支持多个]
-exports.appIds = ['kcptdoc'];
+exports.appIds = ['gmnn'];
 
 //启用oss存储
 exports.oss = false;
 
 //文档物理保存路径 [参照第一及第二项中的参数修改]
-exports.DocDiskPath = 'D:\\Work\\NodeApp\\DocMgr\\doc\\SkDocMgr\\';
+exports.DocDiskPath = 'D:\\Code\\NodeApp\\DocMgr\\doc\\SkDocMgr\\';
