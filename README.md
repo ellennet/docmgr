@@ -1,11 +1,11 @@
-#SkDocMgr文档服务
-##系统说明
-###1、基础框架
-系统是基于nodeexpres构建的api服务。大体上所有的api都以restful来设计。默认服务端口是3010。调用API前必须从API认证服务器中获取访问token。
-###2、数据存储
+# SkDocMgr文档服务
+## 系统说明
+### 1、基础框架
+系统是基于nodeexpres构建的api服务。所有的api都基于http。默认服务端口是3010。调用API前必须从API认证服务器中获取访问token。
+### 2、数据存储
 数据库存储采用了mongodb3.2，文件存储使用了mongodb的GridFS。共有2个集合：categories、fs。categories存放目录结构信息、fs存放文件信息。目录结构采用改过的祖先数组数据结构模式。
-##使用说明（示例代码为C#，采用Restsharp库。返回的json对象可以使用VS中的选择性粘贴自动创建模型类。）
-###从服务器中得到授权token。
+## 使用说明（示例代码为C#，采用Restsharp库。返回的json对象可以使用VS中的选择性粘贴自动创建模型类。）
+### 从服务器中得到授权token。
 ```csharp
 ！！appId、appKey、签名算法是验证合法性的唯一，请妥善保存。
 
@@ -44,7 +44,7 @@ public static string HMACSHA256Encode(string username, string appId, string appK
     return EnText.ToString();
 }
 ```
-###得到所有根目录
+### 得到所有根目录
 ```
 var client = new RestClient("http://localhost:3010"); //服务器地址            
 var request = new RestRequest("categorie", Method.GET);
@@ -52,15 +52,15 @@ request.AddHeader("_token", token);
 var response = client.Execute(request);
 string ret = response.Content;
 ```
-###得到子目录（只取一层）
+### 得到子目录（只取一层）
 ```
 var request = new RestRequest("categorie?pid=?", Method.GET); //pid为父目录id
 ```
-###得到目录的信息
+### 得到目录的信息
 ```
 var request = new RestRequest("categorie/id", Method.GET); //id为目录的id
 ```
-###根据目录层级及名称获取目录信息
+### 根据目录层级及名称获取目录信息
 ```
 //举例：项目文件/直管部/华东医院扩建新楼工程
 var request = new RestRequest("categorieQuery", Method.GET);
@@ -69,11 +69,11 @@ request1.AddQueryParameter("action", "getctg");
 request1.AddQueryParameter("level", "3");
 request1.AddQueryParameter("name", "华东医院扩建新楼工程");
 ```
-###得到目录下所有子目录（遍历）
+### 得到目录下所有子目录（遍历）
 ```
 var request = new RestRequest("categorieQuery?action=getdeep&id=", Method.GET); 
 ```
-###复制目录结构（遍历）
+### 复制目录结构（遍历）
 ```
 //pid：复制到哪个目录的ID,
 //name：新目录名称
@@ -85,13 +85,13 @@ var request = new RestRequest("categorieQuery?action=getdeep&id=", Method.GET);
 string query = "pid=&name=&sid=&&order=&usercode=&tags=&remarks=";
 var request = new RestRequest("categorieQuery?action=copy&" + query, Method.GET); //返回新目录的ID
 ```
-###同一级是否存在同名目录
+### 同一级是否存在同名目录
 ```csharp
 //如果没有重名返回"false"字符串，如果有重名返回已有目录的ID
 var request = new RestRequest("categorieQuery?action=duplicate&parent=&name=", Method.GET); 
 //parent为父目录ID，name为目录名称。注意：系统是允许重名目录存在。
 ```
-###创建目录
+### 创建目录
 ```
 Categorie categorie1 = new Categorie();
 var client1 = new RestClient("http://localhost:3010"); //doc服务器地址            
@@ -129,26 +129,26 @@ public class Categorie
     public string UserCode { get; set; }
 }
 ```
-###删除目录
+### 删除目录
 ```
 var request = new RestRequest("categorie/id", Method.DELETE); //id为目录id
 ```
-###删除目录（遍历）
+### 删除目录（遍历）
 ```
 //删除所有子目录及文件
 var request = new RestRequest("categorie?action=fdelete&id=", Method.DELETE); //id为目录id
 ```
-###修改目录名称
+### 修改目录名称
 ```
 var request = new RestRequest("categorie/id?name=?", Method.PUT); //id为目标目录id name为新的目录名称
 ```
-###移动目录
+### 移动目录
 TODO
-###得到某个目录下的所有文件（不包括子目录）
+### 得到某个目录下的所有文件（不包括子目录）
 ```
 var request = new RestRequest("files?cid=", Method.GET); //cid为目录的id
 ```
-###遍历得到某个目录下的所有目录
+### 遍历得到某个目录下的所有目录
 ```
 var request = new RestRequest("categorieQuery?action=getdeep&id=", Method.GET); //id为目录的id
 request.AddHeader("_token", token);
@@ -177,39 +177,39 @@ public class doc
     public List<doc> childDocs { get; set; }
 }
 ```
-###得到某个目录及子目录下的所有文件
+### 得到某个目录及子目录下的所有文件
 ```
 var request = new RestRequest("filesQuery?action=listfileroot&cid=", Method.GET); //cid为目录的id
 ```
-###查询某个目录下是否有同名文件
+### 查询某个目录下是否有同名文件
 ```
 var request = new RestRequest("filesQuery?action=duplicate&cid=&name=", Method.GET); //cid为目录的id，name为文件名称
 ```
-###查询文件
+### 查询文件
 ```
 var request = new RestRequest("filesQuery?action=search&q=?", Method.GET); //q为关键字
 ```
-###得到文件（下载文件）
+### 得到文件（下载文件）
 ```
 var request = new RestRequest("files/id", Method.GET); //id为文件的id
 ```
-###得到文件（流）
+### 得到文件（流）
 ```
 var request = new RestRequest("files/stream/id", Method.GET); //id为文件的id
 ```
-###得到文件信息
+### 得到文件信息
 ```
 var request = new RestRequest("files/info/id", Method.GET); //id为文件的id
 ```
-###移动文件
+### 移动文件
 ```
 var request = new RestRequest("files?fid=&cid=", Method.PUT); //fid为文件的id，cid为目标目录id
 ```
-###删除文件
+### 删除文件
 ```
 var request = new RestRequest("files/id", Method.DELETE); //id为文件id
 ```
-###上传文件
+### 上传文件
 ```
 var client = new RestClient("http://localhost:3010"); //doc服务器地址
 var request = new RestRequest("files", Method.POST);            
