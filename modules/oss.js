@@ -6,7 +6,7 @@ let config = require('../modules/config');
 let client = new OSS({
   region: 'oss-cn-shenzhen',
   accessKeyId: 'LTAIWPItjnHU3eTN',
-  accessKeySecret: 'EpWlC6vWOt1VB66n4vUCNCBqP1qndG',
+  accessKeySecret: '*',
   bucket: 'skdocmgr'
 });
 
