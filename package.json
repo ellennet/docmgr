@@ -1,0 +1,31 @@
+{
+  "name": "SkDocMgr",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "1.19.0",
+    "co": "4.6.0",
+    "cookie-parser": "1.4.5",
+    "debug": "~2.2.0",
+    "ejs": "3.1.5",
+    "express": "4.17.1",
+    "express-session": "1.17.1",
+    "gridfs-stream": "1.1.1",
+    "jade": "~1.11.0",
+    "jquery-form": "4.3.0",
+    "log": "6.0.0",
+    "log4js": "6.3.0",
+    "minio": "7.0.16",
+    "moment": "2.28.0",
+    "mongodb": "2.2.19",
+    "morgan": "1.10.0",
+    "multiparty": "4.2.2",
+    "request": "^2.1.1",
+    "serve-favicon": "2.5.0",
+    "urlencode": "1.1.0",
+    "uuid": "8.3.0"
+  }
+}

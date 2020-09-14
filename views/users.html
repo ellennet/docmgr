@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie ie9" lang="en" class="no-js"> <![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="zh-cn" class="no-js">
+<!--<![endif]-->
+
+<head>
+	<title>Login | SkDocMgr</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="description" content="SkDocMgr">
+	<meta name="author" content="zhb">
+	<!-- CSS -->	
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">	
+	<link href="http://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="assets/css/main.css" rel="stylesheet" type="text/css">
+	<!--[if lte IE 9]>
+		<link href="assets/css/main-ie.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/main-ie-part2.css" rel="stylesheet" type="text/css" />
+	<![endif]-->
+	<!-- Fav and touch icons -->
+	<!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/kingadmin-favicon144x144.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/kingadmin-favicon114x114.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/ico/kingadmin-favicon72x72.png">
+	<link rel="apple-touch-icon-precomposed" sizes="57x57" href="assets/ico/kingadmin-favicon57x57.png">
+	<link rel="shortcut icon" href="assets/ico/favicon.png">-->
+</head>
+
+<body>
+	<div class="wrapper full-page-wrapper page-auth page-login text-center">
+		<div class="inner-page">
+			<div class="logo">
+				<a href="#"><img src="assets/img/kingadmin-logo.png" alt="" /></a>
+			</div>
+			<div class="login-box center-block">
+				<form class="form-horizontal" role="form" action='/users' method="post">
+					<div class="form-group">
+						<label for="username" class="control-label sr-only">用户名</label>
+						<div class="col-sm-12">
+							<div class="input-group">
+								<input type="text" placeholder="用户名" name="username" id="username" class="form-control">
+								<span class="input-group-addon"><i class="fa fa-user"></i></span>
+							</div>
+						</div>
+					</div>
+					<label for="password" class="control-label sr-only">密码</label>
+					<div class="form-group">
+						<div class="col-sm-12">
+							<div class="input-group">
+								<input type="password" placeholder="密码" name="password" id="password" class="form-control">
+								<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+							</div>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-custom-primary btn-lg btn-block btn-auth"><i class="fa fa-arrow-circle-o-right"></i> 登录</button>
+				</form>
+				<div class="links">
+					<p><%= msg %></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer class="footer">&copy; 2016 zhb@Skygeoinfo</footer>
+	<!-- Javascript -->	
+	<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="http://cdn.bootcss.com/modernizr/2.6.2/modernizr.min.js"></script>	
+</body>
+
+</html>

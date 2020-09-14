@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie ie9" lang="en" class="no-js"> <![endif]-->
+<!--[if !(IE)]><!-->
+<html lang="zh-cn" class="no-js">
+<!--<![endif]-->
+
+<head>
+	<title>File Manager | SkDocMgr</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="description" content="SkDocMgr">
+	<meta name="author" content="zhb">
+	<!-- CSS -->
+	<link href="http://cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	<link href="http://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/assets/css/main.css" rel="stylesheet" type="text/css">
+	<link href="/assets/css/my-custom-styles.css" rel="stylesheet" type="text/css">
+
+	<link href="/dhtmlx/codebase/dhtmlx.css" rel="stylesheet" type="text/css">
+
+	<script src="http://cdn.bootcss.com/jquery/2.1.0/jquery.min.js"></script>
+	<script src="http://cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="http://cdn.bootcss.com/modernizr/2.6.2/modernizr.min.js"></script>
+	<script src="/assets/js/plugins/datatable/jquery.dataTables.min.js"></script>
+	<script src="/assets/js/king-common.js"></script>
+	<script src="/assets/js/plugins/bootstrap-contextmenu/bootstrap-contextmenu.js"></script>
+	<script src="/dhtmlx/codebase/dhtmlx.js"></script>
+	<script src="/javascripts/jquery.tmpl.min.js"></script>
+	<script src="/javascripts/jquery.tmplPlus.min.js"></script>
+	<script src="/assets/js/plugins/tree/jstree.js"></script>
+
+	<script>
+		var _token = "<%= token %>";
+	</script>
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div class="wrapper">
+		<!-- TOP BAR -->
+		<!-- /top -->
+		<!-- BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+		<div class="bottom">
+			<div class="container">
+				<div class="row">
+
+					<!-- content-wrapper -->
+					<div class="col-md-12 content-wrapper">
+						<!-- main -->
+						<div class="content">
+							<div class="main-header">
+								<h2>File Manager</h2>
+								<em>file manager with tree view and contextual menu</em>
+							</div>
+							<div class="main-content">
+								<!-- FILE MANAGER -->
+								<div class="file-manager">
+									<ul class="list-inline file-main-menu">
+										<li>
+											<a href="#" data-toggle="modal" data-target="#myModal">
+												<span class="fa-stack fa-lg"><i class="fa fa-folder-o fa-stack-2x"></i><i class="fa fa-plus-square-o fa-stack-1x"></i></span> 创建目录
+											</a>
+										</li>
+										<li><a href="#" data-toggle="modal" data-target="#myModalUpload"><i class="fa fa-upload"></i> 上传文件</a></li>		
+										<li><a href="javascript:deleteFolder();"><i class="fa fa-close"></i> 删除目录</a></li>	
+										<li>
+											<a href="#" data-toggle="modal" data-target="#myModalRename">
+												<span class="fa-stack fa-lg"><i class="fa fa-exchange fa-stack-1x"></i><i class="fa fa-file-o fa-stack-2x"></i></span> 目录重命名
+											</a>
+										</li>																	
+									</ul>
+									<div class="row">
+										<div class="col-lg-2 col-md-4">
+											<div class="input-group">
+												<input type="text" value="" id="infoBox" class="form-control">
+												<span class="input-group-btn"><button class="btn btn-default" type="button">Go</button></span>
+											</div>
+											<div class="well tree-wrapper">
+												<div id="tree-file-manager"></div>
+											</div>
+										</div>
+										<div class="col-lg-10 col-md-8">
+											<div class="table-responsive">
+												<table id="datatable-file-manager" class="table table-sorting table-dark-header datatable">
+													<thead>
+														<tr>
+															<th>名称</th>
+															<th>大小(KB)</th>
+															<th>修改日期</th>
+															<th>修改人</th>
+															<th>备注</th>
+															<th>Tags</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody id='dataTbody'></tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- END FILE MANAGER -->
+							</div>
+							<!-- /main-content -->
+						</div>
+						<!-- /main -->
+					</div>
+					<!-- /content-wrapper -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- END BOTTOM: LEFT NAV AND RIGHT MAIN CONTENT -->
+	</div>
+	<!-- /wrapper -->
+	<!-- FOOTER -->
+	<footer class="footer">&copy; 2016 zhb</footer>
+	<!-- END FOOTER -->
+	<!-- Javascript -->
+
+	<!--创建目录-->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">创建目录</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<label for="cName" class="col-sm-3 control-label">目录名</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="cName" id="cName" placeholder="目录名">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cTags" class="col-sm-3 control-label">Tags</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="cTags" id="cTags" placeholder="Tags">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cRemarks" class="col-sm-3 control-label">备注</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="cRemarks" id="cRemarks" placeholder="备注">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cOrder" class="col-sm-3 control-label">排序号</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="cOrder" id="cOrder" placeholder="排序号">
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="userCode" class="col-sm-3 control-label">自定义编号</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="userCode" id="userCode" placeholder="自定义编号">
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="pid" class="col-sm-3 control-label">父目录id</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="pid" id="pid" placeholder="父目录ID，为空的时候创建根目录">
+							</div>
+						</div>																							
+					</form>					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseFolder"><i class="fa fa-times-circle"></i> 关闭</button>
+					<button type="button" class="btn btn-custom-primary" id="btnCreateFolder"><i class="fa fa-check-circle"></i> 创建</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+
+	<!--上传文件-->
+	<div class="modal fade" id="myModalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalUploadLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalUploadLabel">上传文件</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" id="uploadForm" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="tags" class="col-sm-3 control-label">Tags</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="tags" id="tags" placeholder="Tags">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="remarks" class="col-sm-3 control-label">备注</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="remarks" id="remarks" placeholder="备注">
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="file1" class="col-sm-3 control-label">选择文件</label>
+							<div class="col-sm-9">
+								<input type="file" id="file1" name="file1">
+								<input type="hidden" id="cid" name="cid">
+								<p class="help-block"><em></em></p>
+							</div>
+						</div>		
+													
+						<div class="form-group">
+							<label for="remarks" class="col-sm-3 control-label">是否bimviz</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="bimviz" id="bimviz" value="0" placeholder="">
+							</div>
+						</div>	
+						
+						<div class="form-group">
+							<label for="remarks" class="col-sm-3 control-label">bimviz用户名</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="busername" id="busername" value="xdds" placeholder="">
+							</div>
+						</div>	
+						
+						<div class="form-group">
+							<label for="remarks" class="col-sm-3 control-label">bimviz 项目id</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="bprojectid" id="bprojectid" value="61a85f28-331b-4dcb-a280-8a32fc2cc314" placeholder="">
+							</div>
+						</div>													
+					</form>					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseUpload"><i class="fa fa-times-circle"></i> 关闭</button>
+					<button type="button" class="btn btn-custom-primary" id="btnUpload"><i class="fa fa-check-circle"></i> 上传</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+
+	<!--目录重命名-->
+	<div class="modal fade" id="myModalRename" tabindex="-1" role="dialog" aria-labelledby="myModalRenameLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalRenameLabel">上传文件</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal" role="form" id="renameForm">
+						<div class="form-group">
+							<label for="newName" class="col-sm-3 control-label">新目录名</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" name="newName" id="newName" placeholder="新目录名">
+							</div>
+						</div>											
+					</form>					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="btnCloseRename"><i class="fa fa-times-circle"></i> 关闭</button>
+					<button type="button" class="btn btn-custom-primary" id="btnRename"><i class="fa fa-check-circle"></i> 修改</button>
+				</div>
+			</div>
+		</div>
+	</div>	
+
+	<script id="trTemplate" type="text/x-jquery-tmpl ">
+		<tr id='${id}'>
+			<td>${ofilename}</td>
+			<td>${size}</td>
+			<td>${uTime}</td>
+			<td>${uUser}</td>
+			<td>${remarks}</td>
+			<td>${tags}</td>
+			<td>
+				<a href='/files/${id}?_token=${token}'>下载</a> |
+				<a href="javascript:deleteFile('${id}')">删除</a>
+			</td>
+		</tr>
+	</script>
+
+	<script>
+		var selectedFolderId = ''; //当前选中的目录ID
+
+		//删除目录
+		function deleteFolder(){
+			if(selectedFolderId==''){
+				alert('请选择目录');
+				return;
+			}		
+
+			if(confirm('确定要删除目录？')){
+				$.ajax({
+						url: '/categorie/'+selectedFolderId,
+						type: 'DELETE',
+						headers: {
+								"_token": _token
+						},						
+						cache: false,
+						data: {}
+				}).done(function(res) {										
+					if(res!='#ok#'){
+						alert(res);
+					}
+					else{
+						//刷新目录 todo
+					}
+				}).fail(function(res) {
+					alert(res);
+				});				
+			}
+		}
+
+		//获取目录中的文件
+		function getFileInNode(id) {
+			$('#dataTbody').empty();
+			$.ajax({
+				url: '/fm/getfile/' + id,
+				type: 'GET',
+				dataType: 'json',
+				headers: {'token': _token},
+				cache: false,	
+				data: {},
+				success: function(data, textStatus, xhr) {
+					if (data.length > 0) {
+						$("#trTemplate").tmpl(data).appendTo("#dataTbody");
+					}
+				},
+				error: function(xhr, textStatus, errorThrown) {
+					alert('load file error');
+				}
+			});	
+		}
+
+		//删除文件
+		function deleteFile(fid){
+			if(confirm('确定要删除文件？')){
+			$.ajax({
+				url: '/files/' + fid,
+				type: 'DELETE',
+				dataType: 'html',
+				headers: {'_token': _token},
+				cache: false,	
+				data: {},
+				success: function(data, textStatus, xhr) {
+					getFileInNode(selectedFolderId);
+				},
+				error: function(xhr, textStatus, errorThrown) {
+					alert('删除文件失败');
+				}
+			});				
+			}
+		}
+
+		$(function(){
+			//目录更名
+			$('#btnRename').click(function(){
+				if(selectedFolderId==''){
+					alert('请选择目录');
+					return;
+				}
+
+				var newName = $('#newName').val();
+				if(newName==''){
+					alert('请输入目录名');
+					return;
+				}
+
+				$.ajax({
+						url: '/categorie/'+selectedFolderId+'?name='+newName,
+						type: 'PUT',
+						headers: {
+							"_token": _token
+						},						
+						cache: false,
+						data: {}
+				}).done(function(res) {
+					//刷新目录 todo
+					$('#btnCloseRename').trigger('click');
+				}).fail(function(res) {
+					alert(res);
+				}); 
+			});
+
+
+			//上传文件
+			$('#btnUpload').click(function(){
+				if(selectedFolderId==''){
+					alert('请选择目录');
+					return;
+				}
+
+				$('#cid').val(selectedFolderId);
+
+				$.ajax({
+						url: '/files',
+						type: 'POST',
+						headers: {
+								"_token": _token
+						},						
+						cache: false,
+						data: new FormData($('#uploadForm')[0]),
+						processData: false,
+						contentType: false
+				}).done(function(res) {
+					getFileInNode(selectedFolderId);
+					$('#btnCloseUpload').trigger('click');
+				}).fail(function(res) {
+					alert(res);
+				}); 				
+			});
+
+			//创建目录
+			$('#btnCreateFolder').click(function(){
+				var name = $('#cName').val();
+				if(name==''){
+					alert('请输入目录名称');
+					return;
+				}
+				
+				$.ajax({
+					headers: {
+							"_token": _token
+					},					
+					url: '/categorie',
+					type: 'POST',
+					dataType: 'html',				
+					cache: false,	
+					data: {
+						name: name,
+						parent: $('#pid').val(),
+						tags: $('#cTags').val(),
+						remarks: $('#cRemarks').val(),
+						order: $('#cOrder').val(),
+						UserCode: $('#userCode').val()
+					},
+					success: function(data, textStatus, xhr) {
+						//close dialog  
+						$('#btnCloseFolder').trigger('click');
+						//reload selectedFolderId
+						//todo
+					},
+					error: function(xhr, textStatus, errorThrown) {
+						alert('请求错误');
+					}
+				});	
+			})
+
+			// file manager tree
+			$('#tree-file-manager').jstree({
+				'core' : {
+					'data' : {
+						"url" : '/fm/getroot/' + _token,
+						'data': function (node) {
+								return { 'selectId': node.id, 'rnd': Math.random() };
+						}						
+					},
+					"check_callback" : true,
+					"multiple" : false
+				},
+				'plugins' : ["types", "contextmenu"],
+				"contextmenu":{ 
+					"items":{
+            "create":null,  
+            "rename":null,  
+            "remove":null,  
+            "ccp":null,
+            // "创建子目录":{  
+            //     "label":"创建子目录",  
+            //     "action":function(data){  
+            //         var inst = jQuery.jstree.reference(data.reference),  
+            //         obj = inst.get_node(data.reference);  
+            //         //dialog.show({"title":"新建“"+obj.text+"”的子菜单",url:"/accountmanage/createMenu?id="+obj.id,height:280,width:400});  
+            //     }  
+            // },
+            // "删除目录":{  
+            //     "label":"删除目录",  
+            //     "action":function(data){  
+						// 			
+            //     }  
+            // },
+            // "重命名":{  
+            //     "label":"重命名",  
+            //     "action":function(data){
+            //     }  
+            // },																								
+					}
+				},
+				'types' : {
+					'default' : {
+						'icon' : 'fa fa-folder'
+					}
+				}
+			}).on('select_node.jstree', function(e, data) {
+				$('#infoBox').val(data.selected);
+				selectedFolderId=data.selected[0];				
+				$('#pid').val(selectedFolderId);
+				getFileInNode(data.selected);
+				//var nodeType = data.instance.get_node(data.selected).type;
+			});		
+		});
+
+	</script>
+</body>
+
+</html>
